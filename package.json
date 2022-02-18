@@ -4,14 +4,12 @@
   "description": "XState helper for using asynchronous guards",
   "main": "lib/index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "lint": "eslint src/",
     "format": "prettier --write README.md src/**/*.js",
     "prepare": "husky install"
   },
-  "keywords": [
-    "xstate"
-  ],
+  "keywords": ["xstate"],
   "author": "Richard Laffers",
   "license": "MIT",
   "devDependencies": {
