@@ -2,12 +2,16 @@
   "name": "xstate-async-guards",
   "version": "1.0.0",
   "description": "XState helper for using asynchronous guards",
+  "source": "src/index.js",
   "main": "lib/index.js",
+  "module": "es/index.js",
   "scripts": {
     "test": "jest --passWithNoTests",
     "lint": "eslint src/",
     "format": "prettier --write README.md src/**/*.js",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "build": "parcel build",
+    "watch": "parcel watch"
   },
   "keywords": ["xstate"],
   "author": "Richard Laffers",
@@ -24,6 +28,7 @@
     "eslint-plugin-promise": "^5.2.0",
     "husky": "^7.0.0",
     "jest": "^27.5.1",
+    "parcel": "^2.3.2",
     "prettier": "^2.5.1"
   },
   "peerDependencies": {
@@ -33,5 +38,9 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "sideEffects": false,
+  "engines": {
+    "node": ">= 12"
   }
 }

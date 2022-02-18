@@ -1,3 +1,4 @@
+src/
 tests/
 coverage/
 jest.config.js
@@ -8,3 +9,6 @@ CONTRIBUTING.md
 .gitignore
 .npmignore
 .husky
+commitlint.config.js
+.travis.yml
+.parcel-cache/
