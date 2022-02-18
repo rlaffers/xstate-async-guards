@@ -1,6 +1,6 @@
 {
   "name": "xstate-async-guards",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "XState helper for using asynchronous guards",
   "source": "src/index.js",
   "main": "lib/index.js",
@@ -13,7 +13,9 @@
     "build": "parcel build",
     "watch": "parcel watch"
   },
-  "keywords": ["xstate"],
+  "keywords": [
+    "xstate"
+  ],
   "author": "Richard Laffers",
   "license": "MIT",
   "devDependencies": {
