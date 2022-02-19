@@ -4,7 +4,19 @@
   "description": "XState helper for using asynchronous guards",
   "source": "src/index.js",
   "main": "lib/index.js",
-  "module": "es/index.js",
+  "module": "lib/index.mjs",
+  "exports": {
+    "import": "./lib/index.mjs",
+    "require": "./lib/index.js"
+  },
+  "targets": {
+    "main": {
+      "optimize": true
+    },
+    "module": {
+      "optimize": true
+    }
+  },
   "scripts": {
     "test": "jest --passWithNoTests",
     "lint": "eslint src/",
@@ -13,9 +25,7 @@
     "build": "parcel build",
     "watch": "parcel watch"
   },
-  "keywords": [
-    "xstate"
-  ],
+  "keywords": ["xstate"],
   "author": "Richard Laffers",
   "license": "MIT",
   "devDependencies": {
@@ -44,5 +54,10 @@
   "sideEffects": false,
   "engines": {
     "node": ">= 12"
+  },
+  "homepage": "https://github.com/rlaffers/xstate-async-guards",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rlaffers/xstate-async-guards"
   }
 }
