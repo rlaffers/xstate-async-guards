@@ -1,6 +1,6 @@
 import { actions, spawn } from 'xstate'
 
-const { assign, send, choose } = actions
+const { assign, send } = actions
 
 /**
  * Wraps an async function in a callback service and calls it with the original event (if specified).
@@ -13,17 +13,17 @@ const { assign, send, choose } = actions
  * @return {function} The returned function is a callback service.
  */
 function withOriginalEvent(asyncGuard, context, event, guardID) {
-  return sendBack => {
+  return (sendBack) => {
     const originalEvent = event.originalEvent ?? event
     asyncGuard(context, originalEvent)
-      .then(result => {
+      .then((result) => {
         sendBack({
           type: `done.async-guard.${guardID}`,
           originalEvent,
-          result
+          result,
         })
       })
-      .catch(error => {
+      .catch((error) => {
         sendBack({ type: `error.async-guard.${guardID}`, error })
       })
   }
@@ -64,7 +64,7 @@ function createAsyncGuardNode({
   lastStep,
   initialStateName,
   stateID,
-  inGuardEvaluation
+  inGuardEvaluation,
 }) {
   if (transition.cond === undefined) {
     return {
@@ -72,9 +72,9 @@ function createAsyncGuardNode({
       on: {
         [eventName]: {
           ...transition,
-          target: transition.target ?? initialStateName
-        }
-      }
+          target: transition.target ?? initialStateName,
+        },
+      },
     }
   }
 
@@ -89,80 +89,61 @@ function createAsyncGuardNode({
         ...transition,
         cond: undefined,
         in: inGuardEvaluation.trailing ? transition.in : undefined,
-        target: transition.target ?? initialStateName
+        target: transition.target ?? initialStateName,
       },
       [`done.async-guard.${guardID}`]: [
         {
           cond: isResultTrue,
           in: inGuardEvaluation.trailing ? transition.in : undefined,
-          actions: send((context, evt) => evt.originalEvent)
+          actions: send((context, evt) => evt.originalEvent),
         },
         step !== lastStep
           ? {
-              target: makeStateName(eventName, step + 1)
+              target: makeStateName(eventName, step + 1),
             }
           : {
-              target: initialStateName
-            }
+              target: initialStateName,
+            },
       ],
 
       [`error.async-guard.${guardID}`]: {
         // we send this simplified event to allow users to declare error transitions for
         // specific guards
-        actions: send(`error.async-guard.${guardName}`)
+        actions: send(`error.async-guard.${guardName}`),
       },
-
-      [`skip-async-guard.${guardID}`]:
-        step !== lastStep
-          ? makeStateName(eventName, step + 1)
-          : initialStateName
     },
 
-    entry: choose([
-      {
-        // in: transition.in, // in guards are ignored by "choose"
-        actions: assign((context, evt, { state }) => {
-          let asyncGuard =
-            typeof transition.cond === 'function'
-              ? transition.cond
-              : state.configuration.find(x => x.order === 0).options.guards[
-                  transition.cond
-                ]
+    // TODO stop this actor on exit
+    entry: assign((context, evt, { state }) => {
+      let asyncGuard =
+        typeof transition.cond === 'function'
+          ? transition.cond
+          : state.configuration.find((x) => x.order === 0).options.guards[
+              transition.cond
+            ]
 
-          if (
-            transition.in != null &&
-            inGuardEvaluation.leading &&
-            !state.matches(transition.in.replace(/^#[^.]*\./, ''))
-          ) {
-            // we will not execute the async guard if the "in" guard is not satisfied
-            // instead we will resolve with a false → evaluate to the next case
-            asyncGuard = async () => false
-          }
-
-          if (typeof asyncGuard !== 'function') {
-            throw new Error(
-              `The transition guard is not a function and no such guard was found among configured machine guards. Check transitions for event ${eventName}`
-            )
-          }
-          const actorID = `asyncGuardActor#${guardID}`
-          return {
-            [actorID]: spawn(
-              withOriginalEvent(asyncGuard, context, evt, guardID),
-              {
-                name: actorID
-              }
-            )
-          }
-        })
-      },
-      {
-        // next case immediately
-        actions: send((context, evt) => ({
-          type: `skip.async-guard.${guardID}`,
-          originalEvent: evt
-        }))
+      if (
+        transition.in != null &&
+        inGuardEvaluation.leading &&
+        !state.matches(transition.in.replace(/^#[^.]*\./, ''))
+      ) {
+        // we will not execute the async guard if the "in" guard is not satisfied
+        // instead we will resolve with a false → evaluate to the next case
+        asyncGuard = async () => false
       }
-    ])
+
+      if (typeof asyncGuard !== 'function') {
+        throw new Error(
+          `The transition guard is not a function and no such guard was found among configured machine guards. Check transitions for event ${eventName}`
+        )
+      }
+      const actorID = `asyncGuardActor#${guardID}`
+      return {
+        [actorID]: spawn(withOriginalEvent(asyncGuard, context, evt, guardID), {
+          name: actorID,
+        }),
+      }
+    }),
   }
 }
 
@@ -242,16 +223,16 @@ export function withAsyncGuards(config, options) {
   const defaultOptions = {
     inGuardEvaluation: {
       leading: true,
-      trailing: false
-    }
+      trailing: false,
+    },
   }
   options = {
     ...defaultOptions,
     ...options,
     inGuardEvaluation: {
       ...defaultOptions.inGuardEvaluation,
-      ...options?.inGuardEvaluation
-    }
+      ...options?.inGuardEvaluation,
+    },
   }
 
   const { on, id, ...rest } = config
@@ -297,15 +278,15 @@ export function withAsyncGuards(config, options) {
           lastStep: transitions.length - 1,
           initialStateName,
           stateID: id,
-          inGuardEvaluation: options.inGuardEvaluation
+          inGuardEvaluation: options.inGuardEvaluation,
         })
       })
       return acc
     },
     {
       [initialStateName]: {
-        on: {}
-      }
+        on: {},
+      },
     }
   )
 
@@ -314,6 +295,6 @@ export function withAsyncGuards(config, options) {
     id,
     initial: initialStateName,
     states,
-    on: globalTransitions
+    on: globalTransitions,
   }
 }
