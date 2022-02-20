@@ -1,6 +1,6 @@
 import { actions, spawn } from 'xstate'
 
-const { assign, send } = actions
+const { assign, send, stop } = actions
 
 /**
  * Wraps an async function in a callback service and calls it with the original event (if specified).
@@ -81,6 +81,7 @@ function createAsyncGuardNode({
   const guardName =
     typeof transition.cond === 'string' ? transition.cond : transition.cond.name
   const guardID = `${guardName}[${stateID}.${eventName}.${step}]`
+  const actorID = `asyncGuardActor#${guardID}`
 
   return {
     // this is for transitioning on success with the original event
@@ -137,13 +138,13 @@ function createAsyncGuardNode({
           `The transition guard is not a function and no such guard was found among configured machine guards. Check transitions for event ${eventName}`
         )
       }
-      const actorID = `asyncGuardActor#${guardID}`
       return {
         [actorID]: spawn(withOriginalEvent(asyncGuard, context, evt, guardID), {
           name: actorID,
         }),
       }
     }),
+    exit: stop(actorID),
   }
 }
 
