@@ -1,6 +1,6 @@
 {
   "name": "xstate-async-guards",
-  "version": "1.0.2",
+  "version": "0.0.0-development",
   "description": "XState helper for using asynchronous guards",
   "source": "src/index.js",
   "main": "lib/index.js",
@@ -23,7 +23,8 @@
     "format": "prettier --write README.md src/**/*.js",
     "prepare": "husky install",
     "build": "parcel build",
-    "watch": "parcel watch"
+    "watch": "parcel watch",
+    "semantic-release": "semantic-release"
   },
   "keywords": [
     "xstate"
@@ -43,7 +44,8 @@
     "husky": "^7.0.0",
     "jest": "^27.5.1",
     "parcel": "^2.3.2",
-    "prettier": "^2.5.1"
+    "prettier": "^2.5.1",
+    "semantic-release": "^19.0.2"
   },
   "peerDependencies": {
     "xstate": "^4.30.1"
