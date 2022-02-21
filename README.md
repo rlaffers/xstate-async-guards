@@ -91,6 +91,8 @@ const machine = createMachine({
 })
 ```
 
+[See CodeSandbox here](https://codesandbox.io/s/xstate-async-guards-example-1-tz9b9l?file=/src/machine.js).
+
 ## Options
 
 Function `withAsyncGuards` accepts an object as the second argument which may contain the following options:
