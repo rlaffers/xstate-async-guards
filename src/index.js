@@ -110,7 +110,10 @@ function createAsyncGuardNode({
       [`error.async-guard.${guardID}`]: {
         // we send this simplified event to allow users to declare error transitions for
         // specific guards
-        actions: send(`error.async-guard.${guardName}`),
+        actions: send((context, event) => ({
+          type: `error.async-guard.${guardName}`,
+          error: event.error,
+        })),
       },
     },
 
