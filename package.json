@@ -3,11 +3,11 @@
   "version": "0.0.0-development",
   "description": "XState helper for using asynchronous guards",
   "source": "src/index.js",
-  "main": "lib/index.js",
-  "module": "lib/index.mjs",
+  "main": "dist/cjs/index.js",
+  "module": "dist/es/index.js",
   "exports": {
-    "import": "./lib/index.mjs",
-    "require": "./lib/index.js"
+    "import": "./dist/es/index.js",
+    "require": "./dist/cjs/index.js"
   },
   "targets": {
     "main": {
