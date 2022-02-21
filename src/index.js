@@ -114,7 +114,6 @@ function createAsyncGuardNode({
       },
     },
 
-    // TODO stop this actor on exit
     entry: assign((context, evt, { state }) => {
       let asyncGuard =
         typeof transition.cond === 'function'

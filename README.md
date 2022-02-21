@@ -2,6 +2,10 @@
 
 This is a helper for using asynchronous guards in [XState](https://xstate.js.org) state machines with ease.
 
+[![npm version](https://img.shields.io/npm/v/xstate-async-guards)](https://npmjs.com/package/xstate-async-guards)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+
 ## Rationale
 
 Out of the box, XState supports only synchronous, pure condition functions (a.k.a. guards) in [guarded transitions](https://xstate.js.org/docs/guides/guards.html). This makes sense since synchronous transitions undertaken right after an event is received by a state machine are easy to conceptualize.
@@ -26,10 +30,6 @@ states: {
   Started: {}
 }
 ```
-
-[![npm version](https://img.shields.io/npm/v/xstate-async-guards)](https://npmjs.com/package/xstate-async-guards)
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
 ## Installation
 
