@@ -49,46 +49,55 @@ const machine = createMachine({
   context: {}, // must not be undefined
   initial: 'Idle',
   states: {
-
     // this state uses async guards
     Idle: withAsyncGuards({
       on: {
         EVENT: [
           {
-            cond: isValueStart,  // async function reference
-            target: '#root.Started'  // must use absolute targets
+            cond: isValueStart, // async function reference
+            target: '#root.Started', // must use absolute targets
           },
           {
-            cond: 'isValueFaulty',  // string reference to an async function in configured guards
+            cond: 'isValueFaulty', // string reference to an async function in configured guards
             target: '#root.Broken',
-            actions: send('BROKEN')  // actions are supported
+            actions: send('BROKEN'), // actions are supported
           },
           {
-            target: '#root.Off'  // default transition is optional
-          }
+            target: '#root.Off', // default transition is optional
+          },
         ],
 
         // rejected guard promises can be handled explicitly
         'error.async-guard.isValueStart': {
-          actions: (_, event) => console.log('Async guard error!', event)
-        }
+          actions: (_, event) => console.log('Async guard error!', event),
+        },
       },
 
-      id: 'idle'  // state ID is mandatory
+      id: 'idle', // state ID is mandatory
 
       // all standard state props are supported. E.g.:
       entry: () => console.log('entered Idle'),
       exit: () => console.log('exited Idle'),
-      invoke: { /*...*/ }
+      invoke: {
+        /*...*/
+      },
       // etc.
     }),
 
     Started: {},
     Broken: {},
-    Off: {}
-  }
+    Off: {},
+  },
 })
 ```
+
+## Options
+
+Function `withAsyncGuards` accepts an object as the second argument which may contain the following options:
+
+- `inGuardEvaluation` - an object with `leading` and `trailing` boolean props.
+  - `leading` (boolean) - When true (default), `in` guards will be evaluated first, before async guards are evaluated. An async guard will be evaluated only if the `in` guard is satisfied.
+  - `trailing` (boolean) - When true, in guards will be evaluated after async guards have been successfully resolved. If an `in` guard is not satisfied at this moment, the transition will not be taken (even though the async guard is satisfied). Defaults to `false`.
 
 ## Caution
 
@@ -98,6 +107,4 @@ A thorough consideration should be given to consequences of using asynchronous g
 
 - Support combining sync and async guards within the same state node
 - Relax the requirement for absolute targets
-- Document options
 - Document error handling
-- Document "in" guard evaluation
