@@ -22,13 +22,12 @@
     "lint": "eslint src/",
     "format": "prettier --write README.md src/**/*.js",
     "prepare": "husky install",
+    "prepublishOnly": "npm run build",
     "build": "parcel build",
     "watch": "parcel watch",
     "semantic-release": "semantic-release"
   },
-  "keywords": [
-    "xstate"
-  ],
+  "keywords": ["xstate"],
   "author": "Richard Laffers",
   "license": "MIT",
   "devDependencies": {
